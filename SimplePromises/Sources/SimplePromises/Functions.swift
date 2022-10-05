@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Functions.swift
 //  
 //
 //  Created by Dmitriy Lupych on 04.10.2022.
