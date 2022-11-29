@@ -74,3 +74,33 @@ public extension Promise {
         }
     }
 }
+
+//MARK: - Combine
+
+public extension Promise {
+    /// Combines promise with another promise and returns new one with tuple value
+    func combine<U>(with promise: Promise<U>) -> Promise<(T, U)> {
+        let group = DispatchGroup()
+        var tValue: T!
+        var uValue: U!
+
+        group.enter()
+
+        subscribe { value in
+            tValue = value
+            group.leave()
+        }
+
+        group.enter()
+
+        promise.subscribe { value in
+            uValue = value
+            group.leave()
+        }
+
+        return .init { promise in
+            group.notify(queue: .main) {
+                promise((tValue, uValue)) }
+        }
+    }
+}
